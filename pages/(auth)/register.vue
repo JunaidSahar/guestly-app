@@ -1,63 +1,61 @@
 <template>
-  <div class="flex items-center min-h-screen w-full justify-center">
-    <div class="bg-white p-10 rounded-lg w-1/3">
-      <AuthHeader
-        :link="{
-          title: 'Login',
-          href: '/login',
-        }"
-        title="Welcome to Guestly"
-        short-description="Start communicating with your guests today. All in WhatsApp"
-      />
-      <div class="pt-6">
-        <UForm
-          :schema="schema"
-          :state="state"
-          class="space-y-4"
-          @submit="onSubmit"
-        >
-          <UFormGroup label="Full Name" name="fullName">
-            <UInput
-              placeholder="Enter your full name"
-              size="lg"
-              v-model="state.fullName"
-            />
-          </UFormGroup>
-
-          <UFormGroup label="Email" name="email">
-            <UInput
-              placeholder="Enter your business email"
-              size="lg"
-              v-model="state.email"
-            />
-          </UFormGroup>
-
-          <UFormGroup label="Password" name="password">
-            <UInput
-              placeholder="Enter a password"
-              size="lg"
-              aria-autocomplete="false"
-              v-model="state.password"
-              type="password"
-            />
-          </UFormGroup>
-          <div>
-            <UCheckbox
-              label="I agree to the Guestly Terms & Conditions and the Privacy Policy"
-              name="termsAndConditions"
-            />
-          </div>
-
-          <UButton
-            :loading="isSubmitted"
-            loading-icon="svg-spinners:ring-resize"
-            type="submit"
+  <div class="bg-white p-6 z-50 relative rounded-lg">
+    <AuthHeader
+      :link="{
+        title: 'Login',
+        href: '/login',
+      }"
+      title="Welcome to Guestly"
+      short-description="Start communicating with your guests today. All in WhatsApp"
+    />
+    <div class="pt-6">
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
+        <UFormGroup label="Full Name" name="fullName">
+          <UInput
+            placeholder="Enter your full name"
             size="lg"
-          >
-            Submit
-          </UButton>
-        </UForm>
-      </div>
+            v-model="state.fullName"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Email" name="email">
+          <UInput
+            placeholder="Enter your business email"
+            size="lg"
+            v-model="state.email"
+          />
+        </UFormGroup>
+
+        <UFormGroup label="Password" name="password">
+          <UInput
+            placeholder="Enter a password"
+            size="lg"
+            aria-autocomplete="false"
+            v-model="state.password"
+            type="password"
+          />
+        </UFormGroup>
+        <div>
+          <UCheckbox
+            label="I agree to the Guestly Terms & Conditions and the Privacy Policy"
+            name="termsAndConditions"
+          />
+        </div>
+
+        <UButton
+          :loading="isSubmitted"
+          loading-icon="svg-spinners:ring-resize"
+          type="submit"
+          size="lg"
+        >
+          Submit
+        </UButton>
+      </UForm>
     </div>
   </div>
 </template>
@@ -66,6 +64,7 @@
 import { object, string, type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { definePageMeta, registerSchema } from "#build/imports";
+import { useRegister } from "~/composables/global-hooks/useAuth";
 
 const schema = registerSchema;
 const isSubmitted = ref(false);
@@ -78,12 +77,26 @@ const state = reactive({
   password: undefined,
 });
 
+const taost = useToast();
+const router = useRouter();
 async function onSubmit(event: FormSubmitEvent<Schema>) {
+  const url = useRuntimeConfig().public.API_URL + "auth/owner-signup";
   isSubmitted.value = true;
-  const url = useRuntimeConfig().public?.API_URL + "auth/owner-signup";
-  console.log(event.data);
+  try {
+    const res = await useRegister(url, event.data);
+    console.log(res, "res");
+    if (res?.statusCode === 400) {
+      taost.add({ title: "User with this email already exist!" });
+    } else {
+      taost.add({ title: "We have sent you an confirmation email" });
+      router.push("/confirm-email");
+    }
+    isSubmitted.value = false;
+  } catch (error) {
+    isSubmitted.value = false;
+    console.log(error, "is error");
+  }
 }
-const isClicked = ref(false);
 definePageMeta({
   title: "Register",
   metaDescription: "Create an account",

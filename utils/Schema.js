@@ -7,3 +7,8 @@ export const registerSchema = object({
     .min(8, "Must be at least 8 characters")
     .required("Required"),
 });
+
+export const loginSchema = object({
+  email: string().email("Invalid email").required("Required"),
+  password: string(),
+});

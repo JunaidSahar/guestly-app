@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between pb-10">
+  <div class="flex items-center justify-between pb-6">
     <img
       src="@/assets/brand/logo_primary.svg"
       class="h-10 w-auto"
@@ -8,9 +8,9 @@
     <NuxtLink :to="link.href" class="underline">{{ link.title }}</NuxtLink>
   </div>
   <div>
-    <span class="text-gray-600 text-lg">1/4</span>
-    <h1 class="text-3xl font-semibold text-gray-700">{{ title }}</h1>
-    <p class="text-gray-600 font-medium">
+    <span class="text-gray-700 text-lg">1/4</span>
+    <h1 class="text-3xl font-semibold text-gray-900">{{ title }}</h1>
+    <p class="text-gray-700 font-medium">
       {{ shortDescription }}
     </p>
   </div>

@@ -7,5 +7,8 @@ export default defineAppConfig({
         background: "bg-darkBlue/50",
       },
     },
+    notifications: {
+      position: 'top-0 bottom-[unset]'
+    }
   },
 });
