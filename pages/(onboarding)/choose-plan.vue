@@ -7,11 +7,11 @@
     <div class="flex items-center pt-10 border-b w-fit">
       <p
         class="px-8 py-2 bg-white cursor-pointer"
-        v-for="(item, index) in ['Monthly', 'Yearly']"
+        v-for="(item, index) in ['monthly', 'yearly']"
         :key="index"
-        @click="selectedTab = index"
+        @click="handleTogglePlan(item)"
         :class="
-          index == selectedTab
+          item.includes(selectedPlan)
             ? 'border-b-2 text-gray-900 border-medium-purple-600'
             : 'text-gray-400'
         "
@@ -21,7 +21,9 @@
     </div>
     <div class="pt-6 grid grid-cols-3 gap-4">
       <FeatureOnboardingPricingCard
-        v-for="(item, index) in PricingData"
+        v-for="(item, index) in planData.filter(
+          (plan) => plan.recurringType == selectedPlan
+        )"
         :key="index"
         :data="item"
       />
@@ -29,55 +31,37 @@
   </div>
 </template>
 <script setup>
-const selectedTab = ref(0);
 definePageMeta({
   title: "Choose Plan",
   metaDescription: "Choose a plan",
   layout: "onboarding",
 });
+const planData = ref([]);
+const selectedPlan = ref("month");
 
-const PricingData = [
-  {
-    title: "Starter Plan",
-    price: "$29.99",
-    shortDescription: "For small  businesses with one property",
-    features: [
-      "1 business property",
-      "1 thousand conversations per business property",
-      "Template studio",
-      "Automated messages",
-      "Push notification",
-      "Unlimited team members",
-    ],
-    buttonText: "Start free trial",
-  },
-  {
-    title: "Business Plan",
-    price: "$99.99",
-    shortDescription: "For mid size businesses with one property",
-    features: [
-      "1 business property",
-      "1 thousand conversations per business property",
-      "Template studio",
-      "Automated messages",
-      "Push notification",
-      "Unlimited team members",
-    ],
-    buttonText: "Start free trial",
-  },
-  {
-    title: "Enterprice Plan",
-    price: "$199.99",
-    shortDescription: "For large businesses with more then one property",
-    features: [
-      "1 business property",
-      "1 thousand conversations per business property",
-      "Template studio",
-      "Automated messages",
-      "Push notification",
-      "Unlimited team members",
-    ],
-    buttonText: "Start free trial",
-  },
-];
+const handleTogglePlan = (plan) => {
+  if (plan == "monthly") {
+    selectedPlan.value = "month";
+  }
+  if (plan == "yearly") {
+    selectedPlan.value = "year";
+  }
+};
+
+const config = useRuntimeConfig().public;
+async function getPlans() {
+  try {
+    const res = await fetch(config.API_URL + "package/all-package/?type=all");
+    if (!res.ok) {
+      throw new Error("Failed to fetch plans");
+    } else {
+      const data = await res.json();
+      planData.value = data?.packages?.sort((a, b) => a.price - b.price);
+    }
+  } catch (error) {
+    console.error("Error fetching plans", error);
+  }
+}
+
+getPlans();
 </script>
