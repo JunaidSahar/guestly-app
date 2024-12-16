@@ -78,9 +78,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         title: "Payment required",
         description: "Please buy a subscription to continue",
       });
+      router.push("/choose-plan");
+    } else {
       useCookie("user").value = res?.user;
       useCookie("token").value = res?.token;
-      router.push("/choose-plan");
+      window.location.href = "/";
     }
   } catch (error) {
     isSubmitted.value = false;

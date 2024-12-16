@@ -12,3 +12,13 @@ export const loginSchema = object({
   email: string().email("Invalid email").required("Required"),
   password: string(),
 });
+
+export const businessInfoSchema = object({
+  business_name: string()
+    .max(50, "Business name must be maximum 50 characters")
+    .required("Business Name is required"),
+  business_type: string().required("Business Type is required"),
+  business_classification: string(),
+  business_size: string().required("Business Size is required"),
+  pms: string().required("PMS is required"),
+});

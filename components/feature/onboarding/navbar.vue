@@ -6,29 +6,25 @@
       alt="brand"
     />
     <div class="flex items-center gap-8">
-      <div class="flex items-center gap-2">
+      <div
+        v-for="(nav, index) in navigation"
+        :key="index"
+        class="flex items-center gap-2"
+      >
         <h1
-          class="h-6 w-6 flex items-center text-sm justify-center rounded-full text-white font-semibold bg-medium-purple-500"
+          :class="
+            nav.path == route.path ? 'bg-medium-purple-500 ' : 'bg-gray-300 '
+          "
+          class="h-6 w-6 flex items-center text-sm justify-center rounded-full text-white font-semibold"
         >
-          1
+          {{ nav.id }}
         </h1>
-        <p class="font-semibold text-gray-900">Subscibe</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <h1
-          class="h-6 w-6 flex items-center text-sm justify-center rounded-full text-white font-semibold bg-gray-400"
+        <p
+          class="font-semibold"
+          :class="nav.path == route.path ? 'text-gray-900' : 'text-gray-400'"
         >
-          2
-        </h1>
-        <p class="font-semibold text-gray-400">Business Informations</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <h1
-          class="h-6 w-6 flex items-center text-sm justify-center rounded-full text-white font-semibold bg-gray-400"
-        >
-          3
-        </h1>
-        <p class="font-semibold text-gray-400">Integrations</p>
+          {{ nav.name }}
+        </p>
       </div>
     </div>
     <div>
@@ -46,4 +42,23 @@
 
 <script setup>
 const user = useCookie("user").value;
+const route = useRoute();
+
+const navigation = [
+  {
+    id: "1",
+    name: "Subscription",
+    path: "/subscription",
+  },
+  {
+    id: "2",
+    name: "Business Information",
+    path: "/create-business",
+  },
+  {
+    id: "3",
+    name: "Integration",
+    path: "/integration",
+  },
+];
 </script>
