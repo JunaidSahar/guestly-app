@@ -1,4 +1,4 @@
-export const submitBusinessInfo = async (data, token, method) => {
+export const submitBusinessInfo = async (data, token, method, image) => {
   const formData = new FormData();
   const url = useRuntimeConfig().public?.API_URL;
 
@@ -7,6 +7,7 @@ export const submitBusinessInfo = async (data, token, method) => {
   formData.append("buisnessClassification", data?.business_classification);
   formData.append("companySize", data?.business_size);
   formData.append("pms", data?.pms);
+  formData.append("image", image);
 
   // Log the FormData entries
   for (let [key, value] of formData.entries()) {

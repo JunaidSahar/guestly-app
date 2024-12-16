@@ -22,3 +22,11 @@ export const businessInfoSchema = object({
   business_size: string().required("Business Size is required"),
   pms: string().required("PMS is required"),
 });
+
+export const addressSchema = object({
+  country: string(),
+  provice: string(),
+  address: string(),
+  city: string(),
+  zip: string(),
+});

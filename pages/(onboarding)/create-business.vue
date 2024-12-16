@@ -10,37 +10,7 @@
       </p>
     </div>
     <div class="mt-8 space-y-8 w-full p-6 rounded-lg bg-white border">
-      <div class="flex items-start justify-between gap-20">
-        <div class="w-1/3 space-y-1">
-          <h1 class="text-lg font-semibold text-gray-950">
-            Upload Business Image
-          </h1>
-          <p class="text-gray-500 text-sm">
-            The maximum file size you can upload is 5MB.
-          </p>
-        </div>
-        <div class="flex-1">
-          <div class="p-4 rounded-lg border border-dashed relative">
-            <div class="flex items-center gap-2">
-              <div
-                class="w-12 h-12 bg-gray-50 rounded flex items-center justify-center"
-              >
-                <Icon
-                  name="material-symbols:image-outline-rounded"
-                  size="28"
-                  class="text-gray-700"
-                />
-              </div>
-              <p class="text-gray-950">Maximum file size is 5MB</p>
-              <input
-                type="file"
-                class="opacity-0 absolute w-full h-full cursor-pointer"
-                accept="image/*"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <UploadImage :get-image="(e:any) => selectedAvatar = e" />
       <hr />
       <div class="flex items-start justify-between gap-20">
         <div class="w-1/3 space-y-1">
@@ -208,6 +178,7 @@ import { type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { useLogin } from "~/composables/global-hooks/useAuth";
 import { submitBusinessInfo } from "~/composables/global-hooks/useBusiness";
+import UploadImage from "~/components/feature/onboarding/upload-image.vue";
 
 const schema = businessInfoSchema;
 type Schema = InferType<typeof schema>;
@@ -233,12 +204,17 @@ const addressState = reactive({
 const isSubmitted = ref(false);
 const taost = useToast();
 const router = useRouter();
-
+const selectedAvatar = ref();
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   isSubmitted.value = true;
   const token = useCookie("token").value;
   try {
-    const res = await submitBusinessInfo(event.data, token, "POST");
+    const res = await submitBusinessInfo(
+      event.data,
+      token,
+      "POST",
+      selectedAvatar.value
+    );
     // console.log(res);
     isSubmitted.value = false;
     console.log(res);
