@@ -50,7 +50,7 @@ const navigation = [
   {
     id: "1",
     name: "Subscription",
-    path: "/subscription",
+    path: "/choose-pan",
   },
   {
     id: "2",
@@ -60,7 +60,7 @@ const navigation = [
   {
     id: "3",
     name: "Integration",
-    path: "/integration",
+    path: "/integrations",
   },
 ];
 </script>

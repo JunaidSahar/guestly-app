@@ -21,12 +21,17 @@ export const businessInfoSchema = object({
   business_classification: string(),
   business_size: string().required("Business Size is required"),
   pms: string().required("PMS is required"),
-});
-
-export const addressSchema = object({
   country: string(),
   provice: string(),
   address: string(),
   city: string(),
   zip: string(),
+  vat_number: string().min(11, "Number must be 11 characters"),
+  invoice_code: string()
+    .nullable()
+    .optional()
+    .min(7, "Invoice code must be 7 characters"),
+  certified_email_address: string().nullable().optional().email(),
+  phone_number: string().min(8, "Phone number must be 8 characters"),
+  website: string().url(),
 });

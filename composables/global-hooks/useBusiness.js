@@ -8,6 +8,16 @@ export const submitBusinessInfo = async (data, token, method, image) => {
   formData.append("companySize", data?.business_size);
   formData.append("pms", data?.pms);
   formData.append("image", image);
+  formData.append("address[country]", data.country);
+  formData.append("address[street]", data.street);
+  formData.append("address[city]", data.city);
+  formData.append("address[zip]", data.zip);
+  formData.append("address[province]", data.province);
+  formData.append("taxIdNo", data.vat_number);
+  formData.append("codice", data?.invoice_code || "");
+  formData.append("email", data?.certified_email_address || "");
+  formData.append("phoneNo", data.phone_number);
+  formData.append("website", data?.website || "");
 
   // Log the FormData entries
   for (let [key, value] of formData.entries()) {
