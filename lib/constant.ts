@@ -4,7 +4,8 @@ export const PAGES_PATHS = () => {
     ONBOARDING_PRICING: '/choose-plan',
     LOGIN: '/login',
     REGISTER: '/register',
-    ONBOARDING_CREATE_BUSINESS: '/create-business'
+    ONBOARDING_CREATE_BUSINESS: '/create-business',
+    ONBOARDING_INTEGRATIONS: '/integrations'
   }
 }
 
@@ -15,5 +16,6 @@ export const UNPROTECTED_ROUTES = [
 
 export const ONBOARDING_ROUTES = [
   PAGES_PATHS().ONBOARDING_PRICING,
-  PAGES_PATHS().ONBOARDING_CREATE_BUSINESS
+  PAGES_PATHS().ONBOARDING_CREATE_BUSINESS,
+  PAGES_PATHS().ONBOARDING_INTEGRATIONS
 ]

@@ -51,6 +51,7 @@ import { type InferType } from "yup";
 import type { FormSubmitEvent } from "#ui/types";
 import { definePageMeta } from "#build/imports";
 import { useLogin } from "~/composables/global-hooks/useAuth";
+import { useUserStore } from "~/store/userStore";
 
 const isSubmitted = ref(false);
 const schema = loginSchema;
@@ -62,6 +63,7 @@ const state = reactive({
 });
 const taost = useToast();
 const router = useRouter();
+const store = useUserStore();
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   const url = useRuntimeConfig().public.API_URL + "auth/login";
   isSubmitted.value = true;
@@ -78,10 +80,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         title: "Payment required",
         description: "Please buy a subscription to continue",
       });
-      router.push("/choose-plan");
+      store.user = res.user;
+      useCookie("token").value = res.token;
+      window.location.href = "/choose-plan";
     } else {
-      useCookie("user").value = res?.user;
-      useCookie("token").value = res?.token;
+      store.user = res.user;
+      useCookie("token").value = res.token;
       window.location.href = "/";
     }
   } catch (error) {

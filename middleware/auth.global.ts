@@ -1,4 +1,5 @@
 import { ONBOARDING_ROUTES, PAGES_PATHS, UNPROTECTED_ROUTES } from "~/lib/constant"
+import { useUserStore } from "~/store/userStore"
 
 export default defineNuxtRouteMiddleware(
   async (to, from) => {
@@ -6,6 +7,7 @@ export default defineNuxtRouteMiddleware(
       const config = useRuntimeConfig()
       let user = null
       let isLoggedIn = false
+      const store = useUserStore();
       const url = `${config.public.API_URL}user/get-me`
       const access_token = useCookie("token").value
       const response = await fetch(url, {
@@ -16,20 +18,23 @@ export default defineNuxtRouteMiddleware(
       if (response.status == 200) {
         user = await response.json()
         isLoggedIn = true
-        useCookie("user").value = JSON.stringify(user)
+        console.log(user)
+        store.user = user
       } else {
         console.log('failed')
       }
-      console.log(isLoggedIn)
+      // console.log(isLoggedIn)
 
       const isPublicRoute = UNPROTECTED_ROUTES.includes(to.path)
       const isOnboardingRoute = ONBOARDING_ROUTES.includes(to.path)
       const isProtectedRoute = !isPublicRoute
       const userDetails = {
         isPaymentRequired: user?.currentOrganization?.subscription,
-        isBusinessCreated: user?.currentOrganization?.buisness?.length
+        isBusinessCreated: user?.currentOrganization?.buisness?.length,
+        isOnboarded: user?.currentOrganization?.buisness?.every((business: any) => business?.isOnBoarded)
       }
-
+      console.log(userDetails)
+      // return
       // return
       // console.log(user)
 
@@ -43,6 +48,9 @@ export default defineNuxtRouteMiddleware(
       }
       else if (isLoggedIn && isProtectedRoute && !userDetails.isBusinessCreated) {
         targetRoute = PAGES_PATHS().ONBOARDING_CREATE_BUSINESS
+      }
+      else if (isLoggedIn && isProtectedRoute && !userDetails.isOnboarded) {
+        targetRoute = PAGES_PATHS().ONBOARDING_INTEGRATIONS
       }
       if (to.path !== targetRoute) {
         return targetRoute

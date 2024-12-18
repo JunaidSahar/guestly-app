@@ -8,6 +8,7 @@
         Guestly collects this information to verify your identity and keep your
         account safe.
       </p>
+      {{ useCookie("organization").value }}
     </div>
     <div class="mt-8 space-y-8 w-full p-6 rounded-lg bg-white border">
       <UploadImage :get-image="(e:any) => selectedAvatar = e" />

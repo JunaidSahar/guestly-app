@@ -1,6 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto py-10">
     <div>
+      {{ store.user }}
       <h1 class="text-2xl text-gray-900 font-semibold">Choose a plan</h1>
       <p class="text-gray-500">Choose the plan that fits your needs.</p>
     </div>
@@ -31,12 +32,15 @@
   </div>
 </template>
 <script setup>
+import { useUserStore } from "~/store/userStore";
+
 definePageMeta({
   title: "Choose Plan",
   metaDescription: "Choose a plan",
   layout: "onboarding",
 });
 const planData = ref([]);
+const store = useUserStore();
 const selectedPlan = ref("month");
 
 const handleTogglePlan = (plan) => {
