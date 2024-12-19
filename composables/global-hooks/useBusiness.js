@@ -42,3 +42,30 @@ export const submitBusinessInfo = async (data, token, method, image) => {
     console.log(error);
   }
 };
+
+export const skipIntegration = async (businessId, token) => {
+  try {
+    const res = await fetch(
+      `${useRuntimeConfig().public?.API_URL}buisness/update-on-boarding-flag`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isOnBoarded: true,
+          buisnessId: businessId,
+        }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    const FormRes = await res.json();
+    return FormRes;
+  } catch (error) {
+    console.log(error);
+  }
+};

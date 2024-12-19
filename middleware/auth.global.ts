@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(
       const userDetails = {
         isPaymentRequired: user?.currentOrganization?.subscription,
         isBusinessCreated: user?.currentOrganization?.buisness?.length,
-        isOnboarded: user?.currentOrganization?.buisness?.every((business: any) => business?.isOnBoarded)
+        isOnboarded: user?.currentOrganization?.buisness?.some((business: any) => business?.isOnBoarded)
       }
       console.log(userDetails)
       // return
@@ -51,6 +51,9 @@ export default defineNuxtRouteMiddleware(
       }
       else if (isLoggedIn && isProtectedRoute && !userDetails.isOnboarded) {
         targetRoute = PAGES_PATHS().ONBOARDING_INTEGRATIONS
+      }
+      else if (isLoggedIn && isOnboardingRoute && userDetails.isBusinessCreated && userDetails.isOnboarded && userDetails.isPaymentRequired) {
+        targetRoute = PAGES_PATHS().DASHBOARD
       }
       if (to.path !== targetRoute) {
         return targetRoute
