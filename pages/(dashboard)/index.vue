@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <pre>
-    {{ store.user }}
-  </pre
-    >
-  </div>
+  <div class="h-full w-full">{{ store.user }}</div>
 </template>
 
 <script setup>

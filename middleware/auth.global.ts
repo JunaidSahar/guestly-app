@@ -18,7 +18,6 @@ export default defineNuxtRouteMiddleware(
       if (response.status == 200) {
         user = await response.json()
         isLoggedIn = true
-        console.log(user)
         store.user = user
       } else {
         console.log('failed')
@@ -33,7 +32,7 @@ export default defineNuxtRouteMiddleware(
         isBusinessCreated: user?.currentOrganization?.buisness?.length,
         isOnboarded: user?.currentOrganization?.buisness?.some((business: any) => business?.isOnBoarded)
       }
-      console.log(userDetails)
+      // console.log(userDetails)
       // return
       // return
       // console.log(user)
